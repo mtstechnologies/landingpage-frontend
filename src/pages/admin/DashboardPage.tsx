@@ -3,8 +3,11 @@ import { Plus, FolderKanban, CheckCircle2, FileEdit } from "lucide-react";
 
 import { AdminSidebar } from "@/features/admin/components/AdminSidebar";
 import { ProjectsDataTable } from "@/features/admin/components/ProjectsDataTable";
+import { TableSkeleton } from "@/features/admin/components/TableSkeleton"; // Importe o Skeleton
 import { Button } from "@/components/ui/button";
-import { mockAdminProjects } from "@/features/admin/mocks/data";
+
+// Importe o hook do Orval
+import { useGetProjects } from "@/shared/api/generated/portfolio/portfolio";
 
 function StatCard({
   label,
@@ -27,7 +30,9 @@ function StatCard({
 }
 
 export function DashboardPage() {
-  const projects = mockAdminProjects;
+  // Chamada para a API real
+  const { data: projects = [], isLoading } = useGetProjects();
+  
   const published = projects.filter((p) => p.status === "published").length;
   const drafts = projects.filter((p) => p.status === "draft").length;
 
@@ -43,7 +48,7 @@ export function DashboardPage() {
                 Projetos
               </h1>
               <p className="text-sm text-muted-foreground">
-                Gerencie os projetos exibidos no seu portfólio.
+                Gerencie os projetos do seu portfólio via API.
               </p>
             </div>
             <Button asChild>
@@ -61,7 +66,11 @@ export function DashboardPage() {
           </div>
 
           <div className="mt-6">
-            <ProjectsDataTable projects={projects} />
+            {isLoading ? (
+              <TableSkeleton />
+            ) : (
+              <ProjectsDataTable projects={projects} />
+            )}
           </div>
         </div>
       </main>

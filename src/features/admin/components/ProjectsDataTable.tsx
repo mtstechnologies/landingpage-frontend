@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Pencil, Trash2, ExternalLink } from "lucide-react";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,19 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import type { AdminProject, ProjectStatus } from "../types";
-
-const statusStyles: Record<ProjectStatus, string> = {
-  published: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  draft: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  archived: "bg-muted text-muted-foreground border-border",
-};
-
-const statusLabel: Record<ProjectStatus, string> = {
-  published: "Publicado",
-  draft: "Rascunho",
-  archived: "Arquivado",
-};
+// Imports gerados pelo Orval
+import { Project } from "@/shared/api/model";
+import { useDeleteProject } from "@/shared/api/generated/portfolio/portfolio";
+import { useQueryClient } from "@tanstack/react-query";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
@@ -35,10 +25,20 @@ function formatDate(iso: string) {
 }
 
 interface Props {
-  projects: AdminProject[];
+  projects: Project[];
 }
 
 export function ProjectsDataTable({ projects }: Props) {
+  const queryClient = useQueryClient();
+  const { mutate: deleteProject } = useDeleteProject({
+    mutation: {
+      onSuccess: () => {
+        // Invalida a lista para o React Query buscar os dados frescos automaticamente
+        queryClient.invalidateQueries({ queryKey: ["getProjects"] });
+      },
+    },
+  });
+
   return (
     <div className="rounded-lg border border-border bg-card overflow-hidden">
       <div className="overflow-x-auto">
@@ -65,56 +65,32 @@ export function ProjectsDataTable({ projects }: Props) {
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   <div className="flex flex-wrap gap-1">
-                    {project.technologies.slice(0, 3).map((t) => (
+                    {/* Ajuste conforme o tipo retornado pela API */}
+                    {project.technologies?.slice(0, 3).map((t) => (
                       <Badge key={t} variant="secondary" className="font-normal">
                         {t}
                       </Badge>
                     ))}
-                    {project.technologies.length > 3 && (
-                      <Badge variant="outline" className="font-normal">
-                        +{project.technologies.length - 3}
-                      </Badge>
-                    )}
                   </div>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
                   {formatDate(project.updatedAt)}
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={cn("font-medium", statusStyles[project.status])}
-                  >
-                    {statusLabel[project.status]}
-                  </Badge>
+                  <Badge variant="outline">{project.status}</Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
-                    {project.liveUrl && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        asChild
-                        aria-label="Abrir site"
-                      >
-                        <a href={project.liveUrl} target="_blank" rel="noreferrer">
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    )}
-                    <Button variant="ghost" size="icon" asChild aria-label="Editar">
-                      <Link
-                        to="/admin/projects/$id/edit"
-                        params={{ id: project.id }}
-                      >
+                    <Button variant="ghost" size="icon" asChild>
+                      <Link to="/admin/projects/$id/edit" params={{ id: project.id! }}>
                         <Pencil className="h-4 w-4" />
                       </Link>
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Excluir"
                       className="text-destructive hover:text-destructive"
+                      onClick={() => deleteProject({ id: project.id! })}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -122,13 +98,6 @@ export function ProjectsDataTable({ projects }: Props) {
                 </TableCell>
               </TableRow>
             ))}
-            {projects.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={5} className="h-32 text-center text-muted-foreground">
-                  Nenhum projeto cadastrado.
-                </TableCell>
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </div>
