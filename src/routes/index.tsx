@@ -1,19 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HomePage } from "@/pages/home/HomePage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Blank App" },
-      { name: "description", content: "A blank React app with Vite, TypeScript, and Tailwind CSS." },
+      { title: "Alex Carvalho — Engenheiro de Software" },
+      {
+        name: "description",
+        content:
+          "Portfólio de Alex Carvalho, engenheiro de software full-stack focado em produtos escaláveis, arquitetura limpa e experiência do usuário.",
+      },
     ],
   }),
-  component: Index,
+  component: HomePage,
 });
-
-function Index() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
-      <h1 className="text-2xl font-semibold">Blank App</h1>
-    </div>
-  );
-}
