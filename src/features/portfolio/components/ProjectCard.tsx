@@ -1,40 +1,76 @@
-import { Link } from "@tanstack/react-router";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Project } from "../types";
+import { Link } from '@tanstack/react-router'
+import { ExternalLink, Github } from 'lucide-react'
+import { TechBadge } from './TechBadge'
+import { Card, CardContent, CardHeader } from '../../../components/ui/card'
+import type { ProjetoResponse } from '../../../shared/api/model'
 
 interface ProjectCardProps {
-  project: Project;
+  projeto: ProjetoResponse
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ projeto }: ProjectCardProps) {
   return (
-    <Link
-      to="/projects/$slug"
-      params={{ slug: project.slug }}
-      className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-xl"
-    >
-      <Card className="flex h-full flex-col overflow-hidden pt-0 transition-colors group-hover:border-ring">
-        <div className="aspect-video w-full overflow-hidden bg-muted">
+    <Card className="group hover:shadow-md transition-shadow duration-200 overflow-hidden">
+      {projeto.urlCapa && (
+        <div className="aspect-video overflow-hidden">
           <img
-            src={project.coverImage}
-            alt={`Capa do projeto ${project.title}`}
+            src={projeto.urlCapa}
+            alt={projeto.titulo}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <CardHeader>
-          <CardTitle className="text-xl">{project.title}</CardTitle>
-          <CardDescription className="line-clamp-3">{project.description}</CardDescription>
-        </CardHeader>
-        <CardContent className="mt-auto flex flex-wrap gap-2">
-          {project.technologies.map((tech) => (
-            <Badge key={tech} variant="secondary">
-              {tech}
-            </Badge>
-          ))}
-        </CardContent>
-      </Card>
-    </Link>
-  );
+      )}
+      <CardHeader className="pb-2">
+        <Link
+          to="/projects/$slug"
+          params={{ slug: projeto.slug || '' }}
+          className="font-semibold text-lg hover:text-primary transition-colors line-clamp-1"
+        >
+          {projeto.titulo}
+        </Link>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+          {projeto.descricao}
+        </p>
+        {projeto.tecnologias && projeto.tecnologias.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {projeto.tecnologias.slice(0, 5).map((tec) => (
+              <TechBadge key={tec.id} tecnologia={tec} />
+            ))}
+            {projeto.tecnologias.length > 5 && (
+              <span className="text-xs text-muted-foreground self-center">
+                +{projeto.tecnologias.length - 5}
+              </span>
+            )}
+          </div>
+        )}
+        <div className="flex gap-3 pt-1">
+          {projeto.linkProducao && (
+            <a
+              href={projeto.linkProducao}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Demo
+            </a>
+          )}
+          {projeto.linkRepositorio && (
+            <a
+              href={projeto.linkRepositorio}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Github className="w-3.5 h-3.5" />
+              Código
+            </a>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  )
 }

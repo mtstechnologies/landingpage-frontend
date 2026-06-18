@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 // Imports gerados pelo Orval
-import { Project } from "@/shared/api/model";
-import { useDeleteProject } from "@/shared/api/generated/portfolio/portfolio";
+import { ProjetoResponse } from "@/shared/api/model";
+import { useDeleteApiV1AdminPortfolioProjetosId } from "@/shared/api/generated/default/default";
 import { useQueryClient } from "@tanstack/react-query";
 
 function formatDate(iso: string) {
@@ -25,16 +25,16 @@ function formatDate(iso: string) {
 }
 
 interface Props {
-  projects: Project[];
+  projects: ProjetoResponse[];
 }
 
 export function ProjectsDataTable({ projects }: Props) {
   const queryClient = useQueryClient();
-  const { mutate: deleteProject } = useDeleteProject({
+  const { mutate: deleteProject } = useDeleteApiV1AdminPortfolioProjetosId({
     mutation: {
       onSuccess: () => {
         // Invalida a lista para o React Query buscar os dados frescos automaticamente
-        queryClient.invalidateQueries({ queryKey: ["getProjects"] });
+        queryClient.invalidateQueries({ queryKey: ["getApiV1PortfolioProjetos"] });
       },
     },
   });
@@ -57,27 +57,27 @@ export function ProjectsDataTable({ projects }: Props) {
               <TableRow key={project.id} className="hover:bg-muted/30">
                 <TableCell className="font-medium text-foreground">
                   <div className="flex flex-col">
-                    <span>{project.title}</span>
+                    <span>{project.titulo}</span>
                     <span className="text-xs text-muted-foreground line-clamp-1">
-                      {project.description}
+                      {project.descricao}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   <div className="flex flex-wrap gap-1">
                     {/* Ajuste conforme o tipo retornado pela API */}
-                    {project.technologies?.slice(0, 3).map((t) => (
-                      <Badge key={t} variant="secondary" className="font-normal">
-                        {t}
+                    {project.tecnologias?.slice(0, 3).map((t) => (
+                      <Badge key={t.id} variant="secondary" className="font-normal">
+                        {t.nome}
                       </Badge>
                     ))}
                   </div>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
-                  {formatDate(project.updatedAt)}
+                  {project.dataDesenvolvimento ? formatDate(project.dataDesenvolvimento) : '-'}
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{project.status}</Badge>
+                  <Badge variant="outline">Publicado</Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">

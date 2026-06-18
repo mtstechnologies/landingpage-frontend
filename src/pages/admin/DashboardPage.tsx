@@ -7,7 +7,7 @@ import { TableSkeleton } from "@/features/admin/components/TableSkeleton"; // Im
 import { Button } from "@/components/ui/button";
 
 // Importe o hook do Orval
-import { useGetProjects } from "@/shared/api/generated/portfolio/portfolio";
+import { useGetApiV1PortfolioProjetos } from "@/shared/api/generated/default/default";
 
 function StatCard({
   label,
@@ -31,10 +31,12 @@ function StatCard({
 
 export function DashboardPage() {
   // Chamada para a API real
-  const { data: projects = [], isLoading } = useGetProjects();
+  const queryResult = useGetApiV1PortfolioProjetos();
+  const projects = queryResult.data?.data || [];
+  const isLoading = queryResult.isLoading;
   
-  const published = projects.filter((p) => p.status === "published").length;
-  const drafts = projects.filter((p) => p.status === "draft").length;
+  const published = 0;
+  const drafts = 0;
 
   return (
     <div className="min-h-screen bg-background">
