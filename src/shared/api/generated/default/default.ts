@@ -24,13 +24,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   PerfilResponse,
   ProblemDetails,
@@ -40,7 +33,10 @@ import type {
   TecnologiaResponse
 } from '../../model';
 
+import { customInstance } from '../../../../lib/axios-config';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -49,14 +45,16 @@ import type {
  * @summary Obter o perfil profissional público
  */
 export const getApiV1PortfolioPerfil = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PerfilResponse>> => {
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/api/v1/portfolio/perfil`,options
-    );
-  }
+      return customInstance<PerfilResponse>(
+      {url: `/api/v1/portfolio/perfil`, method: 'GET', signal
+    },
+      options);
+    }
 
 
 
@@ -68,16 +66,16 @@ export const getGetApiV1PortfolioPerfilQueryKey = () => {
     }
 
 
-export const getGetApiV1PortfolioPerfilQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = AxiosError<ProblemDetails>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetApiV1PortfolioPerfilQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = ProblemDetails>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiV1PortfolioPerfilQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>> = ({ signal }) => getApiV1PortfolioPerfil({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>> = ({ signal }) => getApiV1PortfolioPerfil(requestOptions, signal);
 
 
 
@@ -87,39 +85,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetApiV1PortfolioPerfilQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>>
-export type GetApiV1PortfolioPerfilQueryError = AxiosError<ProblemDetails>
+export type GetApiV1PortfolioPerfilQueryError = ProblemDetails
 
 
-export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = AxiosError<ProblemDetails>>(
+export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = ProblemDetails>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>,
           TError,
           Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = AxiosError<ProblemDetails>>(
+export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = ProblemDetails>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>,
           TError,
           Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = AxiosError<ProblemDetails>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = ProblemDetails>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Obter o perfil profissional público
  */
 
-export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = AxiosError<ProblemDetails>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError = ProblemDetails>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioPerfil>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -136,18 +134,84 @@ export function useGetApiV1PortfolioPerfil<TData = Awaited<ReturnType<typeof get
 
 
 /**
+ * @summary Atualizar perfil (Administrativo)
+ */
+export const putApiV1AdminPortfolioPerfilId = (
+    id: string,
+    perfilResponse: PerfilResponse,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<PerfilResponse>(
+      {url: `/api/v1/admin/portfolio/perfil/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: perfilResponse, signal
+    },
+      options);
+    }
+
+
+
+export const getPutApiV1AdminPortfolioPerfilIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>, TError,{id: string;data: PerfilResponse}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>, TError,{id: string;data: PerfilResponse}, TContext> => {
+
+const mutationKey = ['putApiV1AdminPortfolioPerfilId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>, {id: string;data: PerfilResponse}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putApiV1AdminPortfolioPerfilId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutApiV1AdminPortfolioPerfilIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>>
+    export type PutApiV1AdminPortfolioPerfilIdMutationBody = PerfilResponse
+    export type PutApiV1AdminPortfolioPerfilIdMutationError = unknown
+
+    /**
+ * @summary Atualizar perfil (Administrativo)
+ */
+export const usePutApiV1AdminPortfolioPerfilId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>, TError,{id: string;data: PerfilResponse}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putApiV1AdminPortfolioPerfilId>>,
+        TError,
+        {id: string;data: PerfilResponse},
+        TContext
+      > => {
+      return useMutation(getPutApiV1AdminPortfolioPerfilIdMutationOptions(options), queryClient);
+    }
+    /**
  * Retorna a lista de projetos associados com suas respectivas tecnologias ordanados por data de desenvolvimento decrescente.
  * @summary Listar projetos desenvolvidos
  */
 export const getApiV1PortfolioProjetos = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjetoResponse[]>> => {
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/api/v1/portfolio/projetos`,options
-    );
-  }
+      return customInstance<ProjetoResponse[]>(
+      {url: `/api/v1/portfolio/projetos`, method: 'GET', signal
+    },
+      options);
+    }
 
 
 
@@ -159,16 +223,16 @@ export const getGetApiV1PortfolioProjetosQueryKey = () => {
     }
 
 
-export const getGetApiV1PortfolioProjetosQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetApiV1PortfolioProjetosQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiV1PortfolioProjetosQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>> = ({ signal }) => getApiV1PortfolioProjetos({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>> = ({ signal }) => getApiV1PortfolioProjetos(requestOptions, signal);
 
 
 
@@ -178,39 +242,39 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetApiV1PortfolioProjetosQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>>
-export type GetApiV1PortfolioProjetosQueryError = AxiosError<unknown>
+export type GetApiV1PortfolioProjetosQueryError = unknown
 
 
-export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = AxiosError<unknown>>(
+export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = unknown>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>,
           TError,
           Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = AxiosError<unknown>>(
+export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = unknown>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>,
           TError,
           Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Listar projetos desenvolvidos
  */
 
-export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetos>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -231,28 +295,31 @@ export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof g
  * @summary Criar novo projeto (Administrativo)
  */
 export const postApiV1AdminPortfolioProjetos = (
-    projetoRequest: ProjetoRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjetoResponse>> => {
+    projetoRequest: ProjetoRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/api/v1/admin/portfolio/projetos`,
-      projetoRequest,options
-    );
-  }
+      return customInstance<ProjetoResponse>(
+      {url: `/api/v1/admin/portfolio/projetos`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: projetoRequest, signal
+    },
+      options);
+    }
 
 
 
-export const getPostApiV1AdminPortfolioProjetosMutationOptions = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, TError,{data: ProjetoRequest}, TContext>, axios?: AxiosRequestConfig}
+export const getPostApiV1AdminPortfolioProjetosMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, TError,{data: ProjetoRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, TError,{data: ProjetoRequest}, TContext> => {
 
 const mutationKey = ['postApiV1AdminPortfolioProjetos'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -260,7 +327,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, {data: ProjetoRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiV1AdminPortfolioProjetos(data,axiosOptions)
+          return  postApiV1AdminPortfolioProjetos(data,requestOptions)
         }
 
 
@@ -272,13 +339,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PostApiV1AdminPortfolioProjetosMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>>
     export type PostApiV1AdminPortfolioProjetosMutationBody = ProjetoRequest
-    export type PostApiV1AdminPortfolioProjetosMutationError = AxiosError<ProblemDetails>
+    export type PostApiV1AdminPortfolioProjetosMutationError = ProblemDetails
 
     /**
  * @summary Criar novo projeto (Administrativo)
  */
-export const usePostApiV1AdminPortfolioProjetos = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, TError,{data: ProjetoRequest}, TContext>, axios?: AxiosRequestConfig}
+export const usePostApiV1AdminPortfolioProjetos = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>, TError,{data: ProjetoRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiV1AdminPortfolioProjetos>>,
         TError,
@@ -292,28 +359,31 @@ export const usePostApiV1AdminPortfolioProjetos = <TError = AxiosError<ProblemDe
  */
 export const putApiV1AdminPortfolioProjetosId = (
     id: string,
-    projetoRequest: ProjetoRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjetoResponse>> => {
+    projetoRequest: ProjetoRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.put(
-      `/api/v1/admin/portfolio/projetos/${id}`,
-      projetoRequest,options
-    );
-  }
+      return customInstance<ProjetoResponse>(
+      {url: `/api/v1/admin/portfolio/projetos/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: projetoRequest, signal
+    },
+      options);
+    }
 
 
 
-export const getPutApiV1AdminPortfolioProjetosIdMutationOptions = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, TError,{id: string;data: ProjetoRequest}, TContext>, axios?: AxiosRequestConfig}
+export const getPutApiV1AdminPortfolioProjetosIdMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, TError,{id: string;data: ProjetoRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, TError,{id: string;data: ProjetoRequest}, TContext> => {
 
 const mutationKey = ['putApiV1AdminPortfolioProjetosId'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -321,7 +391,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, {id: string;data: ProjetoRequest}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiV1AdminPortfolioProjetosId(id,data,axiosOptions)
+          return  putApiV1AdminPortfolioProjetosId(id,data,requestOptions)
         }
 
 
@@ -333,13 +403,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PutApiV1AdminPortfolioProjetosIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>>
     export type PutApiV1AdminPortfolioProjetosIdMutationBody = ProjetoRequest
-    export type PutApiV1AdminPortfolioProjetosIdMutationError = AxiosError<ProblemDetails>
+    export type PutApiV1AdminPortfolioProjetosIdMutationError = ProblemDetails
 
     /**
  * @summary Atualizar projeto existente (Administrativo)
  */
-export const usePutApiV1AdminPortfolioProjetosId = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, TError,{id: string;data: ProjetoRequest}, TContext>, axios?: AxiosRequestConfig}
+export const usePutApiV1AdminPortfolioProjetosId = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>, TError,{id: string;data: ProjetoRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiV1AdminPortfolioProjetosId>>,
         TError,
@@ -352,27 +422,29 @@ export const usePutApiV1AdminPortfolioProjetosId = <TError = AxiosError<ProblemD
  * @summary Excluir projeto (Administrativo)
  */
 export const deleteApiV1AdminPortfolioProjetosId = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.delete(
-      `/api/v1/admin/portfolio/projetos/${id}`,options
-    );
-  }
+      return customInstance<void>(
+      {url: `/api/v1/admin/portfolio/projetos/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
 
 
-export const getDeleteApiV1AdminPortfolioProjetosIdMutationOptions = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+export const getDeleteApiV1AdminPortfolioProjetosIdMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['deleteApiV1AdminPortfolioProjetosId'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -380,7 +452,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  deleteApiV1AdminPortfolioProjetosId(id,axiosOptions)
+          return  deleteApiV1AdminPortfolioProjetosId(id,requestOptions)
         }
 
 
@@ -392,13 +464,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type DeleteApiV1AdminPortfolioProjetosIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>>
 
-    export type DeleteApiV1AdminPortfolioProjetosIdMutationError = AxiosError<ProblemDetails>
+    export type DeleteApiV1AdminPortfolioProjetosIdMutationError = ProblemDetails
 
     /**
  * @summary Excluir projeto (Administrativo)
  */
-export const useDeleteApiV1AdminPortfolioProjetosId = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+export const useDeleteApiV1AdminPortfolioProjetosId = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteApiV1AdminPortfolioProjetosId>>,
         TError,
@@ -408,31 +480,126 @@ export const useDeleteApiV1AdminPortfolioProjetosId = <TError = AxiosError<Probl
       return useMutation(getDeleteApiV1AdminPortfolioProjetosIdMutationOptions(options), queryClient);
     }
     /**
+ * @summary Listar tecnologias (Administrativo)
+ */
+export const getApiV1AdminPortfolioTecnologias = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<TecnologiaResponse[]>(
+      {url: `/api/v1/admin/portfolio/tecnologias`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetApiV1AdminPortfolioTecnologiasQueryKey = () => {
+    return [
+    `/api/v1/admin/portfolio/tecnologias`
+    ] as const;
+    }
+
+
+export const getGetApiV1AdminPortfolioTecnologiasQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiV1AdminPortfolioTecnologiasQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>> = ({ signal }) => getApiV1AdminPortfolioTecnologias(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AdminPortfolioTecnologiasQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>>
+export type GetApiV1AdminPortfolioTecnologiasQueryError = unknown
+
+
+export function useGetApiV1AdminPortfolioTecnologias<TData = Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AdminPortfolioTecnologias<TData = Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AdminPortfolioTecnologias<TData = Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Listar tecnologias (Administrativo)
+ */
+
+export function useGetApiV1AdminPortfolioTecnologias<TData = Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AdminPortfolioTecnologias>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiV1AdminPortfolioTecnologiasQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+/**
  * @summary Criar nova tecnologia (Administrativo)
  */
 export const postApiV1AdminPortfolioTecnologias = (
-    tecnologiaRequest: TecnologiaRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TecnologiaResponse>> => {
+    tecnologiaRequest: TecnologiaRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/api/v1/admin/portfolio/tecnologias`,
-      tecnologiaRequest,options
-    );
-  }
+      return customInstance<TecnologiaResponse>(
+      {url: `/api/v1/admin/portfolio/tecnologias`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: tecnologiaRequest, signal
+    },
+      options);
+    }
 
 
 
-export const getPostApiV1AdminPortfolioTecnologiasMutationOptions = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, TError,{data: TecnologiaRequest}, TContext>, axios?: AxiosRequestConfig}
+export const getPostApiV1AdminPortfolioTecnologiasMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, TError,{data: TecnologiaRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, TError,{data: TecnologiaRequest}, TContext> => {
 
 const mutationKey = ['postApiV1AdminPortfolioTecnologias'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -440,7 +607,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, {data: TecnologiaRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiV1AdminPortfolioTecnologias(data,axiosOptions)
+          return  postApiV1AdminPortfolioTecnologias(data,requestOptions)
         }
 
 
@@ -452,13 +619,13 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PostApiV1AdminPortfolioTecnologiasMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>>
     export type PostApiV1AdminPortfolioTecnologiasMutationBody = TecnologiaRequest
-    export type PostApiV1AdminPortfolioTecnologiasMutationError = AxiosError<ProblemDetails>
+    export type PostApiV1AdminPortfolioTecnologiasMutationError = ProblemDetails
 
     /**
  * @summary Criar nova tecnologia (Administrativo)
  */
-export const usePostApiV1AdminPortfolioTecnologias = <TError = AxiosError<ProblemDetails>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, TError,{data: TecnologiaRequest}, TContext>, axios?: AxiosRequestConfig}
+export const usePostApiV1AdminPortfolioTecnologias = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>, TError,{data: TecnologiaRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiV1AdminPortfolioTecnologias>>,
         TError,

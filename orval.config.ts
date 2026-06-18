@@ -9,6 +9,12 @@ export default defineConfig({
       schemas: './src/shared/api/model',
       client: 'react-query',
       httpClient: 'axios',
+      override: {
+        mutator: {
+          path: './src/lib/axios-config.ts',
+          name: 'customInstance',
+        },
+      },
     },
   },
 });
