@@ -1,0 +1,54 @@
+name: CI — Frontend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-build:
+    name: Lint + Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Instalar dependências
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Type check
+        run: bun run tsc --noEmit
+
+      - name: Build de produção
+        run: bun run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+
+  sdk-sync-check:
+    name: Verificar SDK sincronizado
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Regenerar SDK
+        run: bun run api:gen
+
+      - name: Verificar se há diff (SDK desatualizado)
+        run: |
+          git diff --exit-code src/shared/api/ || \
+          (echo "❌ SDK desatualizado! Rode 'npm run api:gen' e commite." && exit 1)
