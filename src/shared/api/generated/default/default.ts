@@ -291,6 +291,98 @@ export function useGetApiV1PortfolioProjetos<TData = Awaited<ReturnType<typeof g
 
 
 /**
+ * @summary Buscar projeto por slug
+ */
+export const getApiV1PortfolioProjetosSlug = (
+    slug: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ProjetoResponse>(
+      {url: `/api/v1/portfolio/projetos/${slug}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetApiV1PortfolioProjetosSlugQueryKey = (slug: string,) => {
+    return [
+    `/api/v1/portfolio/projetos/${slug}`
+    ] as const;
+    }
+
+
+export const getGetApiV1PortfolioProjetosSlugQueryOptions = <TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError = ProblemDetails>(slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiV1PortfolioProjetosSlugQueryKey(slug);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>> = ({ signal }) => getApiV1PortfolioProjetosSlug(slug, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: slug !== null && slug !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1PortfolioProjetosSlugQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>>
+export type GetApiV1PortfolioProjetosSlugQueryError = ProblemDetails
+
+
+export function useGetApiV1PortfolioProjetosSlug<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError = ProblemDetails>(
+ slug: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1PortfolioProjetosSlug<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError = ProblemDetails>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1PortfolioProjetosSlug<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError = ProblemDetails>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Buscar projeto por slug
+ */
+
+export function useGetApiV1PortfolioProjetosSlug<TData = Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError = ProblemDetails>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1PortfolioProjetosSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiV1PortfolioProjetosSlugQueryOptions(slug,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+/**
  * Cadastra um novo projeto e associa com as tecnologias informadas. Requer autorização.
  * @summary Criar novo projeto (Administrativo)
  */

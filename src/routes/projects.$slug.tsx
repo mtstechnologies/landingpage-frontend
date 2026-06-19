@@ -1,23 +1,13 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ProjectDetailsPage } from "@/pages/portfolio/ProjectDetailsPage";
-import { mockProjects } from "@/features/portfolio/mocks/data";
+import { createFileRoute, notFound } from '@tanstack/react-router'
+import { useGetApiV1PortfolioProjetosSlug } from '../shared/api/generated/default/default'
+import { ProjectDetailsPage } from '@/pages/portfolio/ProjectDetailsPage'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export const Route = createFileRoute("/projects/$slug")({
-  loader: ({ params }) => {
-    const project = mockProjects.find((p) => p.slug === params.slug);
-    if (!project) throw notFound();
-    return { project };
-  },
-  head: ({ loaderData }) => ({
+export const Route = createFileRoute('/projects/$slug')({
+  head: () => ({
     meta: [
-      { title: loaderData ? `${loaderData.project.title} — Case Study` : "Case Study" },
-      {
-        name: "description",
-        content: loaderData?.project.subtitle ?? loaderData?.project.description ?? "Case study",
-      },
-      ...(loaderData?.project.coverImage
-        ? [{ property: "og:image", content: loaderData.project.coverImage } as const]
-        : []),
+      { title: 'Projeto — Michael Trindade' },
+      { name: 'description', content: 'Detalhe de projeto no portfólio de Michael Trindade.' },
     ],
   }),
   notFoundComponent: () => (
@@ -25,15 +15,35 @@ export const Route = createFileRoute("/projects/$slug")({
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Projeto não encontrado</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          O case que você procura não existe ou foi removido.
+          O projeto que você procura não existe ou foi removido.
         </p>
       </div>
     </div>
   ),
-  component: RouteComponent,
-});
+  component: ProjectDetailRoute,
+})
 
-function RouteComponent() {
-  const { project } = Route.useLoaderData();
-  return <ProjectDetailsPage project={project} />;
+function ProjectDetailRoute() {
+  const { slug } = Route.useParams()
+  const { data: response, isLoading, isError } = useGetApiV1PortfolioProjetosSlug(slug)
+  const projeto = response?.data
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="mx-auto max-w-3xl px-6 py-16 flex flex-col gap-6">
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-12 w-3/4" />
+          <Skeleton className="h-6 w-1/2" />
+          <Skeleton className="aspect-video w-full rounded-lg" />
+        </div>
+      </div>
+    )
+  }
+
+  if (isError || !projeto) {
+    throw notFound()
+  }
+
+  return <ProjectDetailsPage projeto={projeto} />
 }

@@ -10,6 +10,7 @@ import type { TecnologiaResponse } from './tecnologiaResponse.ts';
 export interface ProjetoResponse {
   id?: string;
   titulo?: string;
+  slug?: string;
   descricao?: string;
   urlCapa?: string;
   linkProducao?: string;

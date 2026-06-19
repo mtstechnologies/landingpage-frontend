@@ -73,6 +73,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProjetoResponse'
 
+  /api/v1/portfolio/projetos/{slug}:
+    get:
+      summary: Buscar projeto por slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjetoResponse'
+        '404':
+          description: Projeto não encontrado
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
   /api/v1/admin/portfolio/projetos:
     post:
       summary: Criar novo projeto (Administrativo)
@@ -279,6 +302,8 @@ components:
           type: string
           format: uuid
         titulo:
+          type: string
+        slug:
           type: string
         descricao:
           type: string
