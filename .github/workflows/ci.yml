@@ -24,8 +24,11 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Testes unitários
+        run: bun run test
+
       - name: Type check
-        run: bun run tsc --noEmit
+        run: bun run typecheck
 
       - name: Build de produção
         run: bun run build
