@@ -55,14 +55,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Michael Trindade — Engenheiro de Software" },
+      {
+        name: "description",
+        content:
+          "Portfólio de Michael Trindade, engenheiro de software full-stack. Especialista em arquitetura limpa, APIs RESTful e produtos escaláveis. Pesquisador de Mestrado na UFRGS.",
+      },
+      { name: "author", content: "Michael Trindade da Silva" },
+      { name: "keywords", content: "engenheiro de software, Java, Spring Boot, React, TypeScript, portfólio, desenvolvedor full-stack, UFRGS" },
+      { property: "og:title", content: "Michael Trindade — Engenheiro de Software" },
+      {
+        property: "og:description",
+        content:
+          "Portfólio de Michael Trindade, engenheiro de software full-stack. Especialista em arquitetura limpa, APIs RESTful e produtos escaláveis.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:url", content: "https://michaeltrindade.dev" },
+      { property: "og:image", content: "https://michaeltrindade.dev/og-image.png" },
+      { property: "og:locale", content: "pt_BR" },
+      { property: "og:site_name", content: "Michael Trindade — Portfólio" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Michael Trindade — Engenheiro de Software" },
+      {
+        name: "twitter:description",
+        content: "Portfólio de Michael Trindade, engenheiro de software full-stack.",
+      },
+      { name: "twitter:image", content: "https://michaeltrindade.dev/og-image.png" },
+      { name: "robots", content: "index, follow" },
     ],
     links: [
       {
